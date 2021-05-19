@@ -145,10 +145,12 @@ function activate(context) {
 	
 	let disposableEditorQuickRunUnit = vscode.commands.registerCommand('extension.editor_ghdl-quick-run_unit', async (element) => {
 		const filePathEditor = vscode.window.activeTextEditor.document.uri.fsPath; // get file path of the currently opened file
+		await vscode.window.activeTextEditor.document.save();
 		quickRunUnit(filePathEditor); 
 	});
 	let disposableExplorerQuickRunUnit = vscode.commands.registerCommand('extension.explorer_ghdl-quick-run_unit', async (element) => {
 		const filePathExplorer = element.fsPath;
+		await vscode.window.activeTextEditor.document.save();
 		quickRunUnit(filePathExplorer); 
 	});
 
@@ -175,8 +177,6 @@ function activate(context) {
 	});
 	let disposableExplorerRemove = vscode.commands.registerCommand('extension.explorer_ghdl-remove', async (element) => {
 		const filePathExplorer = element.fsPath;
-		await vscode.window.activeTextEditor.document.save(); //save open file before analyzing
-		removeDecorations(); // remove old decorations before adding new ones
 		removeGeneratedFiles(filePathExplorer); 
 	});
 
