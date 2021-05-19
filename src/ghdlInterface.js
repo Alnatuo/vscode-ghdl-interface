@@ -375,7 +375,7 @@ function runUnit(filePath) {
  * @param {string} filePath
  */
  function quickRunUnit(filePath) {
-	//TODO: Use Methods instead of duplicate code
+	//MAYBE-DO: Use Methods instead of duplicate code
 	const settings = new Settings(vscode);
 	const fileImports = settings.getImportFiles();
 	const dirPath = filePath.substring(0, filePath.lastIndexOf("\\")); 
@@ -385,6 +385,9 @@ function runUnit(filePath) {
 	exec(command, {cwd: dirPath}, async (err, stdout, stderr) => {
 		if(err) {
 			vscode.window.showErrorMessage(stderr);
+			if(settings.getAutoRemove()) {
+				removeGeneratedFiles(filePath);
+			}
     		return;
 		} else {
 			vscode.window.showInformationMessage(fileImports + ' imported successfully without errors');
@@ -399,6 +402,9 @@ function runUnit(filePath) {
 			exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
 				if (err) {
 					vscode.window.showErrorMessage(stderr);
+					if(settings.getAutoRemove()) {
+						removeGeneratedFiles(filePath);
+					}
 					return;
 				} else {
 					vscode.window.showInformationMessage(unitName + ' made successfully without errors');
@@ -417,6 +423,9 @@ function runUnit(filePath) {
 							exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
 								if (err) {
 									vscode.window.showErrorMessage(stderr);
+									if(settings.getAutoRemove()) {
+										removeGeneratedFiles(filePath);
+									}
 									return;
 								} else {
 									vscode.window.showInformationMessage(unitName + ' elaborated successfully without errors');
@@ -433,6 +442,9 @@ function runUnit(filePath) {
 						exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
 							if (err) {
 								vscode.window.showErrorMessage(stderr);
+								if(settings.getAutoRemove()) {
+									removeGeneratedFiles(filePath);
+								}
 								return;
 							} else {
 								vscode.window.showInformationMessage(unitName + ' elaborated successfully without errors');
@@ -470,7 +482,7 @@ function cleanGeneratedFiles(filePath) {
 			vscode.window.showErrorMessage(stderr);
     		return;
   		} else {
-			vscode.window.showInformationMessage('successfully cleaned generated files');
+			vscode.window.showInformationMessage('Successfully cleaned generated files');
 		}
 	});
 }
@@ -494,7 +506,7 @@ function removeGeneratedFiles(filePath) {
 			vscode.window.showErrorMessage(stderr);
     		return;
   		} else {
-			vscode.window.showInformationMessage('successfully removed generated files');
+			vscode.window.showInformationMessage('Successfully removed generated files');
 		}
 	});
 }
