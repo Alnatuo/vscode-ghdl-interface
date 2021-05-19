@@ -25,7 +25,7 @@ const { settings } = require('cluster');
 module.exports = class Settings {
     path = require('fs');
 
-    TaskEnum = Object.freeze({"analyze":1, "elaborate":2, "run":3})
+    TaskEnum = Object.freeze({"analyze":1, "elaborate":2, "run":3, "make":4})
     extensionId = "ghdl-interface"
 
     constructor(vscode) {
@@ -78,6 +78,20 @@ module.exports = class Settings {
                                 this.getExplicit(workspaceConfig) + " " +
                                 this.getSynBinding(workspaceConfig) + " " +
                                 this.getMbComments(workspaceConfig)
+        } else if(task = this.TaskEnum.make) {
+            settingsString =    this.getWorkDirectoryName(workspaceConfig) + " " + 
+                                this.getWorkLibraryPath(workspaceConfig) + " " + 
+                                this.getLibraryDirectory(workspaceConfig) + " " +
+                                this.getVhdlStandard(workspaceConfig) + " " + 
+                                this.getIeeeVersion(workspaceConfig) + " " +
+                                this.getSynopsys(workspaceConfig) + " " +
+                                this.getVerbose(workspaceConfig) + " " +
+                                this.getRelaxedRules(workspaceConfig) + " " +
+                                this.getVitalChecks(workspaceConfig) + " " +
+                                this.getPsl(workspaceConfig) + " " +
+                                this.getExplicit(workspaceConfig) + " " +
+                                this.getSynBinding(workspaceConfig) + " " +
+                                this.getMbComments(workspaceConfig)
         } else {
             return null; 
         }
@@ -86,6 +100,10 @@ module.exports = class Settings {
 
     getExtensionId() {
         return this.extensionId; 
+    }
+
+    getWorkspaceConfig() {
+        return this.vscode.workspace.getConfiguration(this.getExtensionId());
     }
 
     getWorkDirectoryName(workspaceConfig) {
@@ -204,5 +222,21 @@ module.exports = class Settings {
         } else {
             return ""
         }
+    }
+
+    getImportFiles() {
+        return this.getWorkspaceConfig().get("general.importFiles")
+    }
+
+    getAutoGHW() {
+        return this.getWorkspaceConfig().get("general.autoGHW")
+    }
+
+    getAutoGTKWave() {
+        return this.getWorkspaceConfig().get("general.autoGTKWave")
+    }
+
+    getAutoRemove() {
+        return this.getWorkspaceConfig().get("general.autoRemove")
     }
 }
