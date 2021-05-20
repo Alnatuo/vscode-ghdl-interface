@@ -432,6 +432,9 @@ function runUnit(filePath) {
 									if (autoGTKWave) {
 										invokeGTKWave(simFilePath)
 									}
+									if(settings.getAutoRemove()) {
+										removeGeneratedFiles(filePath);
+									}
 								}
 							});
 						});
