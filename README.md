@@ -1,7 +1,5 @@
 <h1 align="center"> GHDL Interface </h1>
-This extension allows you to invoke GHDL functions, as well as GTKWave. Beyond it highlights the errors that were reported by GHDL in the editor. 
-
-![ghdl](res/ghdl_demo.gif)
+This extension is an fix and update to the GHDL Interface extension. Install the GHDL Interface extension in VS Code and navigate to %USERPOFILE$\johannesbonk.ghdl-interface-1.1.2 and replace the files package.json, src/ghdlInterface.js and src/settings/Settings.js with the corresponding files from this repository.
 
 ## Requirements 
 You will need to have [GHDL](https://github.com/ghdl/ghdl/releases) and [GTKWave](http://gtkwave.sourceforge.net/) installed on your system. Furthermore both must be set in your environment variables. 
@@ -12,8 +10,10 @@ At present it is possible to invoke the following GHDL functions by either right
 
 | Editor Option  | GHDL Function                  |
 | -------------- | :----------------------------- |
+| ghdl import    | `ghdl -i [import files]`       |
 | ghdl analyze   | `ghdl -a [File]`               |
 | ghdl elaborate | `ghdl -e [Unit]`               |
+| ghdl make      | `ghdl -m [Unit]`               |
 | ghdl run       | `ghdl -r [Unit] [export file]` |
 | ghdl clear     | `ghdl -c`                      |
 | ghdl remove    | `ghdl -r`                      |
@@ -27,14 +27,15 @@ It is also possible to invoke the GHDL functions via the following keybindings.
 
 | Editor Option  | Windows          | Linux             | MacOS             |
 | -------------- | :--------------- | :---------------- | :---------------- |
+| ghdl import    | `ctrl + alt + i` | `shift + alt + i` | `shift + cmd + i` |
 | ghdl analyze   | `ctrl + alt + a` | `shift + alt + a` | `shift + cmd + a` |
 | ghdl elaborate | `ctrl + alt + l` | `shift + alt + e` | `shift + cmd + e` |
+| ghdl make      | `ctrl + alt + m` | `shift + alt + m` | `shift + cmd + m` |
 | ghdl run       | `ctrl + alt + r` | `shift + alt + r` | `shift + cmd + r` |
+| ghdl quick run | `ctrl + alt + q` | `shift + alt + q` | `shift + cmd + q` |
 | ghdl clear     | `ctrl + alt + c` | `shift + alt + c` | `shift + cmd + c` |
 | ghdl remove    | `ctrl + alt + d` | `shift + alt + d` | `shift + cmd + d` |
 
-## Contributions
-In case you encounter any problems or have suggestions regarding the extension, feel free to open an issue at first.
 ## License
 The extension is [licensed](LICENSE "license") under the MIT license.
 
