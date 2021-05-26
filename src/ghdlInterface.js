@@ -66,7 +66,9 @@ const importDialogOptions = {
 };
 const LinkedList = require('./util/linkedlist/LinkedList'); 
 const ErrorData = require('./util/linkedlist/ErrorData'); 
-const Settings = require('./settings/Settings')
+const Settings = require('./settings/Settings');
+
+let output;
   
 // this method is called when vs code is activated
 /**
@@ -74,6 +76,8 @@ const Settings = require('./settings/Settings')
  */
 function activate(context) {
 	console.log('ghdl-interface now active!'); // log extension start
+
+	output = vscode.window.createOutputChannel("GHDL");
 
 	let disposableEditorImport = vscode.commands.registerCommand('extension.editor_ghdl-import_files', async function () {
 		const filePathEditor = vscode.window.activeTextEditor.document.uri.fsPath; // get file path of the currently opened file
@@ -320,7 +324,7 @@ function elaborateFiles(filePath) {
 */
 /**
  * @param {string} filePath
- */
+*/
 function runUnit(filePath) {
 	const settings = new Settings(vscode)
 	const userOptions = settings.getSettingsString(settings.TaskEnum.run) //get user specific settings
@@ -330,12 +334,15 @@ function runUnit(filePath) {
 	const dirPath = filePath.substring(0, filePath.lastIndexOf("\\"));  
 	const fileName = path.basename(filePath);
 	const unitName = fileName.substr(0, fileName.lastIndexOf("."));
+	output.show();
 	if (!autoGHW) {
 		vscode.window.showSaveDialog(ghwDialogOptions).then(fileInfos => {
 			const simFilePath = fileInfos.fsPath;
 			const command = 'ghdl -r ' + userOptions + ' ' + unitName + ' ' + '--wave=' + '"' + simFilePath + '"'; //command to execute (run unit)
 			console.log(command);
+			output.appendLine(command);
 			exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
+				output.append(stderr);
 				if (err) {
 					vscode.window.showErrorMessage(stderr);
 					return;
@@ -351,7 +358,9 @@ function runUnit(filePath) {
 		const simFilePath = unitName+".ghw";
 		const command = 'ghdl -r ' + userOptions + ' ' + unitName + ' ' + '--wave=' + '"' + simFilePath + '"'; //command to execute (run unit)
 		console.log(command);
+		output.appendLine(command);
 		exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
+			output.append(stderr);
 			if (err) {
 				vscode.window.showErrorMessage(stderr);
 				return;
@@ -415,12 +424,15 @@ function runUnit(filePath) {
 					//const dirPath = vscode.workspace.rootPath;
 					const dirPath = filePath.substring(0, filePath.lastIndexOf("\\"));  
 					const fileName = path.basename(filePath);
+					output.show();
 					if (!autoGHW) {
 						vscode.window.showSaveDialog(ghwDialogOptions).then(fileInfos => {
 							const simFilePath = fileInfos.fsPath;
 							const command = 'ghdl -r ' + userOptions + ' ' + unitName + ' ' + '--wave=' + '"' + simFilePath + '"'; //command to execute (run unit)
 							console.log(command);
+							output.appendLine(command);
 							exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
+								output.append(stderr);
 								if (err) {
 									vscode.window.showErrorMessage(stderr);
 									if(settings.getAutoRemove()) {
@@ -442,7 +454,9 @@ function runUnit(filePath) {
 						const simFilePath = unitName+".ghw";
 						const command = 'ghdl -r ' + userOptions + ' ' + unitName + ' ' + '--wave=' + '"' + simFilePath + '"'; //command to execute (run unit)
 						console.log(command);
+						output.appendLine(command);
 						exec(command, {cwd: dirPath}, async (err, stdout, stderr) => { // execute command at workspace directory
+							output.append(stderr);
 							if (err) {
 								vscode.window.showErrorMessage(stderr);
 								if(settings.getAutoRemove()) {
